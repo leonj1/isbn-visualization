@@ -1,0 +1,39 @@
+=== Session 20251220-161500 ===
+Workflow: init-explorer
+Task: General project exploration and context setup
+Status: Initialized
+Context: Explored ISBN Visualization project - interactive 3D visualization of ISBN space
+
+Tech Stack:
+- Frontend: React 19, TypeScript, Three.js (via @react-three/fiber + drei)
+- Build: Vite 6.1, pnpm package manager
+- State: MobX (mobx-react-lite)
+- Data Processing: Node.js scripts (tsx), Rust (for rarity computation)
+- Database: SQLite (better-sqlite3) for library holdings data
+- Image Processing: sharp, pngquant, oxipng
+- Libraries: isbn3 (ISBN parsing), jsbarcode, bencode, zstd compression
+- Docker: Multi-stage build with Rust + Node.js
+
+Project Structure:
+- src/: Main React application
+  - components/: UI components (IsbnMap, Controls, Highlight, Legend, MiniMap, etc.)
+  - lib/: Core logic (Store, ImageLoader, shaders, prefix-data, flight animations)
+  - projections/: Coordinate projection systems (bookshelf, linear)
+- scripts/: Data preprocessing
+  - gen-prefixes.ts: Generate publisher range JSON
+  - write-images/: Generate PNG datasets
+  - rarity/: Rust tool for WorldCat data processing
+  - process-all.sh: Master orchestration script
+
+Key Features:
+- Visualizes all ISBNs in a 2D bookshelf-style projection
+- Multiple dataset overlays (publication date, rarity, publishers, etc.)
+- Interactive zoom/pan with Three.js OrbitControls
+- Real-time ISBN lookup via Google Books API
+- Custom shaders for color gradients and highlighting
+- Minimap navigation
+
+Features: No feature_list.md exists (exploration session only)
+
+Next: Session complete - no next_agent specified
+---

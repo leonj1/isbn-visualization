@@ -17,7 +17,7 @@ Use this command to create implementation prompts following BDD and TDD best pra
 
 **Example**: `/architect Build a user authentication system with JWT`
 
-**Flow**: init-explorer → architect → **request-fidelity-validator** → bdd-agent → **request-fidelity-validator** → test-consistency-validator → gherkin-to-test → codebase-analyst → refactor-decision → test-creator → test-consistency-validator → coder → standards → tester → bdd-test-runner
+**Flow**: init-explorer → architect → **alternate-solutions** → **architecture-evaluator** → **request-fidelity-validator** → bdd-agent → **request-fidelity-validator** → test-consistency-validator → gherkin-to-test → codebase-analyst → refactor-decision → test-creator → test-consistency-validator → coder → standards → tester → bdd-test-runner
 
 ### `/coder` - Orchestrated Development
 Use this command when you want to implement features with full orchestration:
@@ -96,6 +96,8 @@ Use this command to start a forensic Root Cause Analysis debugging session:
 - `.claude/agents/` - Specialized agent configurations
   - `init-explorer.md` - Initializer agent that explores codebase and sets up context
   - `architect.md` - Greenfield spec designer
+  - `alternate-solutions.md` - Generates 3 alternative architectural solutions
+  - `architecture-evaluator.md` - Evaluates and selects optimal solution (uses opus model)
   - `request-fidelity-validator.md` - Semantic guardrail preventing agent drift from user request
   - `bdd-agent.md` - BDD specialist that generates Gherkin scenarios
   - `scope-manager.md` - Complexity gatekeeper for BDD features
@@ -122,7 +124,7 @@ Use this command to start a forensic Root Cause Analysis debugging session:
 - `.claude/skills/` - Reusable skills for Claude Code
   - `context-initializer/` - Auto-invokes init-explorer when context is empty
   - `strict-architecture/` - Enforces governance rules for code
-  - `exa-webfetch/` - Uses Exa API for intelligent web searches
+  - `exa-websearch/` - Uses Exa API for intelligent web searches
 - `tests/bdd/` - Gherkin feature files for BDD scenarios
 
 ## Hooks System
@@ -344,8 +346,10 @@ This skill automatically invokes the init-explorer agent when Claude Code lacks 
 
 **Usage**: Invoke the skill with `skill: "context-initializer"` when you detect empty context.
 
-### `exa-webfetch` - Intelligent Web Search via Exa API
-This skill uses the Exa API for intelligent web searches instead of the default WebFetch tool. It provides semantic search capabilities that understand query meaning.
+### `exa-websearch` - Intelligent Web Search via Exa API
+**IMPORTANT**: This skill REPLACES the built-in `WebSearch` tool. Always use this skill instead of `WebSearch`.
+
+This skill uses the Exa API for intelligent web searches. It provides semantic search capabilities that understand query meaning.
 
 **When it activates**:
 - User asks about current events, news, or recent developments
@@ -355,12 +359,13 @@ This skill uses the Exa API for intelligent web searches instead of the default 
 - User wants to verify current facts, prices, or statistics
 - User asks about time-sensitive data (stock prices, weather, sports)
 - User wants to find pages similar to a given URL
+- **Any situation where you would use the built-in `WebSearch` tool**
 
 **Prerequisites**: Requires `EXA_API_TOKEN` environment variable to be set.
 
 **What it does**: Performs web searches using Exa's neural/semantic search, which understands the meaning of queries rather than just matching keywords. Supports filtering by category (news, research paper, github, etc.), date ranges, and specific domains.
 
-**Usage**: Invoke the skill with `skill: "exa-webfetch"` when up-to-date information is needed.
+**Usage**: Invoke the skill with `skill: "exa-websearch"` for ALL web search needs. Do NOT use the built-in `WebSearch` tool.
 
 ## General Usage
 

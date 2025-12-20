@@ -2,7 +2,7 @@
 name: architect
 description: Pure solutions architect that creates ideal technical specifications and manages task decomposition.
 tools: Write, Read, Task
-skills: exa-webfetch, context-initializer
+skills: exa-websearch, context-initializer
 model: opus
 ultrathink: true
 color: blue
@@ -46,36 +46,38 @@ For the selected task, create `specs/DRAFT-[feature-name].md`.
 
 **Output**: A `specs/DRAFT-*.md` file.
 
-### Phase 2.5: Request Fidelity Validation (MANDATORY)
-After creating the spec, you MUST validate it preserves the user's exact request.
+### Phase 2.5: Alternative Solutions Generation (MANDATORY)
+After creating the spec, you MUST generate alternative solutions for evaluation.
 
 **Action**:
-1. Use the `Task` tool to invoke the **request-fidelity-validator** agent.
+1. Use the `Task` tool to invoke the **alternate-solutions** agent.
 2. Pass the original user request (from `architects_digest.md` Active Stack item).
 3. Pass the path to the spec you just created.
 
 **Prompt Template**:
 ```
-Validate this spec preserves the user's exact request.
+Generate 3 alternative architectural solutions to evaluate against this proposal.
 
 Original User Request: "[The exact text from Active Stack]"
 
-Spec File: specs/DRAFT-[feature-name].md
+Architect's Proposal: specs/DRAFT-[feature-name].md
 
-Check that:
-1. The user's key nouns appear in the spec
-2. No substitutions were made (e.g., "landing page" → "dashboard")
-3. No scope creep was introduced
+Generate meaningfully different alternatives that:
+1. Solve the same user problem differently
+2. Use different architectural patterns or trade-offs
+3. Consider the existing project context
+
+Output to: specs/ALTERNATIVE-SOLUTIONS.md
+
+After generating alternatives, invoke the architecture-evaluator agent to select the optimal solution.
 ```
 
-**If Validation FAILS**:
-- Read the Fidelity Report
-- REVISE the spec to use the user's exact language
-- Re-run validation
-- Do NOT proceed to BDD-agent until validation PASSES
-
-**If Validation PASSES**:
-- Proceed to invoke bdd-agent
+**What Happens Next**:
+- The `alternate-solutions` agent generates 3 alternative approaches
+- The `architecture-evaluator` agent evaluates all 4 solutions (yours + 3 alternatives)
+- The evaluator selects the best solution based on user fidelity and project fit
+- The evaluator then invokes `request-fidelity-validator` to continue the pipeline
+- If your solution is NOT selected, a new DRAFT spec will be created based on the chosen alternative
 
 ### Phase 3: Recursive Decomposition (The "Split")
 **Trigger**: You are invoked with: *"The previous design failed scope check. Break task '[Task Name]' down..."*
